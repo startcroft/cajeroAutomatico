@@ -43,40 +43,46 @@ const retirarDinero = (retiro, cantidadBilletes) => {
 
   if (totalDinero < retiro) {
     alert("Cajero en mantenimiento, vuelva pronto");
-  } 
+  }
   else if (totalDinero >= retiro) {
-    let cambio = totalDinero - retiro;
+    //let cambio = totalDinero - retiro;
 
     cantidadBilletes.forEach(element => {
 
-    const billetesNecesarios = Math.floor(cambio / element.denominacion)
-  
-    if (billetesNecesarios <= element.cantidad) {
-      const billetes = {
-        denominacion: element.denominacion,
-        cantidad: billetesNecesarios
-      }
+      const billetesNecesarios = Math.floor(retiro / element.denominacion)
 
-      dineroRetirado.push(billetes);
-      element.cantidad -= billetesNecesarios;
-      cambio -= element.denominacion * billetesNecesarios;
-    } else if(billetesNecesarios > element.cantidad){
-      const billetes = {
-        denominacion: element.denominacion,
-        cantidad: element.cantidad
-      }
+      if (billetesNecesarios <= element.cantidad) {
+        const billetes = {
+          denominacion: element.denominacion,
+          cantidad: billetesNecesarios
+        }
 
-      dineroRetirado.push(billetes);
-      cambio -= element.denominacion * billetes.cantidad;
-      element.cantidad = element.cantidad > 0 ? 0 : 0;
-    }
+        dineroRetirado.push(billetes);
+        element.cantidad -= billetesNecesarios;
+        retiro -= element.denominacion * billetesNecesarios;
+      } else if (billetesNecesarios > element.cantidad) {
+        const billetes = {
+          denominacion: element.denominacion,
+          cantidad: element.cantidad
+        }
+
+        dineroRetirado.push(billetes);
+        retiro -= element.denominacion * billetes.cantidad;
+        element.cantidad = element.cantidad > 0 ? 0 : 0;
+      }
     }
     )
     totalDinero = 0;
     cantidadBilletes.forEach(element => {
       totalDinero += element.denominacion * element.cantidad;
     })
+    let totalRetirado = 0;
+    dineroRetirado.forEach(element =>{
+      totalRetirado += element.denominacion * element.cantidad;
+    })
 
+    alert("Has retirado: " + totalRetirado);
+    alert("El cajero queda con un total de: " + totalDinero);
     return {
       dineroRetirado,
       cantidadBilletes
@@ -101,7 +107,7 @@ while (autenticado === false) {
   });
 
   if (validacionUsuario === validacionContraseña) {
-    ("Has ingresado");
+    
 
     // Para validar si es usario tipo cliente o administrador
     if (usuarios[validacionContraseña].tipoUsuario == "administrador") {
